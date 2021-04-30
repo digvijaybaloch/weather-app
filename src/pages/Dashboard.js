@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Radio,RadioGroup, FormControlLabel, IconButton, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@material-ui/core';
 import { NavigateNext, NavigateBefore } from '@material-ui/icons';
+import Chart from "react-google-charts";
 import { Row, StyledContainer } from '../styled-components/div'
 import { StyledCard } from '../styled-components/card'
 
@@ -20,14 +21,31 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
  },[temp,fetchWeatherData])
 
  useEffect(()=>{
-  let newArr = [];
-  selectedArr && selectedArr.length > 0 && selectedArr.map(arr => newArr=[...newArr,[arr.dt, arr.main.temp]])
+  let newArr = [['Date', 'Temperature']];
+  selectedArr && selectedArr.length > 0 && selectedArr.map(arr => {
+   let hr = new Date(arr.dt*1000).getUTCHours()
+   console.log(hr)
+   let hrString = "";
+   if(hr===0){
+    hrString = "12 AM"
+   }
+   if(hr === 12){
+    hrString = "12 PM"
+   }
+   if(hr<12){
+    hrString = `${hr} AM`
+   }
+   if(hr>12){
+    hrString = `${hr-12} PM`
+   }
+   return newArr=[...newArr,[hrString, parseFloat(arr.main.temp)]]
+  })
   setSelectedArrNew(newArr)
  },[selectedArr])
 
  useEffect(()=>{
   let arr = weatherData.list.map(item => {
-   let ldt = new Date(item.dt * 1000).getDate()
+   let ldt = new Date(item.dt * 1000).getUTCDate()
    return ldt
   })
   setDateArr(arr.filter((val,idx,self)=> self.indexOf(val) === idx))
@@ -36,7 +54,7 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
  useEffect(()=>{
   let arr={};
   dateArr && weatherData && dateArr.map(dt => arr[`${dt}`] = weatherData.list.filter(wd => {
-   let ld = new Date(wd.dt*1000).getDate()
+   let ld = new Date(wd.dt*1000).getUTCDate()
    return ld === dt
   }))
  setDataAccToDate(arr)
@@ -45,16 +63,14 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
  useEffect(()=>{
   setSelectedArr(dataAccToDate[`${dateSelected}`])
  },[weatherData,temp,dateSelected,setSelectedArr,dataAccToDate])
- console.log("selectedArrNew:",selectedArrNew)
  console.log("selectedArr:",selectedArr)
- console.log("dateArr:",dateArr)
 
  const dateBuilder = (d) => {
-  let months = ["January","February","March","April","June","July","August","September","October","November","December"]
+  let months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
   let days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
   let day = days[d.getDay()]
-  let date = d.getDate()
-  let month = months[d.getMonth()]
+  let date = d.getUTCDate()
+  let month = months[d.getUTCMonth()]
   let year = d.getFullYear()
   return `${day}, ${date} ${month} ${year}`
  }
@@ -99,6 +115,19 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
     </StyledCard>
    })}
   </div>
-  {selectedArr && selectedArr.length > 0 && selectedArr.map((sa,idx) =><div key={idx}>{sa.main.temp.toFixed(1)}</div> )}
+ {selectedArrNew && selectedArrNew.length > 1 && <Row bg="red" width="100%">
+  <Chart height={500} width={"100%"} chartType="ColumnChart" loader={<div>Loading Chart</div>} data={selectedArrNew} options={{
+   title: "Temperature Data",
+   legend: { position: 'none' },
+   chartArea: { width: "30%" },
+   hAxis: {
+    title: 'Temperature',
+    minValue: 0,
+  },
+  vAxis: {
+    title: tempSymbol,
+  },
+  }} />
+  </Row>}
  </StyledContainer>
 }
