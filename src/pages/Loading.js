@@ -1,10 +1,9 @@
 import React from 'react'
-// import CircularProgress from '@material-ui/core/CircularProgress';
-import tenor from '../assets/images/tenor.gif'
+import { WrapperDiv, SpineDiv, BallDiv } from '../styled-components/div'
 
 export default function Loading() {
- return <React.Fragment>
-  <img height="100px" width="100px" src={tenor} alt="Loading..." />
-  {/* <CircularProgress /> */}
-  </React.Fragment>
+ return <WrapperDiv>
+   <SpineDiv/>
+   <BallDiv/>
+  </WrapperDiv>
 }
