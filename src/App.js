@@ -5,7 +5,7 @@ import { Switch, Redirect, Route, withRouter } from "react-router-dom";
 import { StylesProvider } from '@material-ui/core/styles';
 import { fetchWeatherData } from "./actions/weather";
 import { StyledBox, StyledContainer } from './styled-components/div';
-import Loading from './containers/Loading';
+import Loading from './pages/Loading';
 import Dashboard from './containers/Dashboard';
 
 const App = ({ data, fetchWeatherData }) => {
