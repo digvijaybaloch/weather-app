@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { IconButton } from '@material-ui/core';
 import { NavigateNext, NavigateBefore } from '@material-ui/icons';
-import { Row } from '../styled-components/div';
+import { Row } from '../../styled-components/div';
 
 const Pagination = ({ cardsPerPage, totalCards, currentPage, paginate }) => {
  const pageNumberLimit = useState(5)[0]
@@ -33,7 +33,7 @@ const Pagination = ({ cardsPerPage, totalCards, currentPage, paginate }) => {
    }
   }
  }
- return <Row width="100%" mWidth="100%" height="50px" jc="space-between">
+ return <Row data-testid="paginationRow" width="100%" mWidth="100%" height="50px" jc="space-between">
   <Row>
    {currentPage !== 1 && <IconButton onClick={handleClickPrev}>
     <NavigateBefore fontSize="large" style={{ color: '#000' }} />
