@@ -4,7 +4,7 @@ import {
 import { call, put, takeLatest } from 'redux-saga/effects'
 import * as api from '../store/api'
 
-function* fetchWeatherDataAsync(action) {
+export function* fetchWeatherDataAsync(action) {
  try {
   const { units } = action.payload;
   const result = yield call(() => api.fetchWeatherData({ units }).then(response => response.data));

@@ -16,6 +16,7 @@ const app = (
   </Provider>
 );
 
+// app,
 ReactDOM.render(
   app,
   document.getElementById('root')
