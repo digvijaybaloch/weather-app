@@ -80,7 +80,7 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
   </RadioGroup>
   </Row>
   <Pagination currentPage={currentPage} cardsPerPage={cardsPerPage} totalCards={dateArr.length} paginate={paginate} />
-  <CardContainer padding="10px" mt="10px" mb="10px" >
+  <CardContainer padding="10px" mt="10px" mb="50px" >
    {currentCards && currentCards.map((d,idx) =>{
     let temp = 0;
     let avgTemp = 0;

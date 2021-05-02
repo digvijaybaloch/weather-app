@@ -157,7 +157,5 @@ position: absolute;
 
 
 export {
- StyledBox, StyledContainer, Row, CardContainer, WrapperDiv,
- SpineDiv,
- BallDiv
+ StyledBox, StyledContainer, Row, CardContainer, WrapperDiv, SpineDiv, BallDiv
 }
