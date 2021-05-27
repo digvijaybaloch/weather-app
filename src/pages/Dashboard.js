@@ -24,8 +24,10 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
    setCurrentPage(number)
  }
  useEffect(()=>{
-  if(temp === 'F') {setTempSymbol('°F'); return fetchWeatherData({ units: 'Imperial' })}
-  if(temp === 'C') {setTempSymbol('°C'); return fetchWeatherData({ units: 'metric' })}
+  if(!weatherData){
+   if(temp === 'F') {setTempSymbol('°F'); return fetchWeatherData({ units: 'Imperial' })}
+   if(temp === 'C') {setTempSymbol('°C'); return fetchWeatherData({ units: 'metric' })}
+  }
  },[temp,fetchWeatherData])
  useEffect(()=>{
   let newArr = [];
@@ -66,12 +68,16 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
    return ld === dt
   }))
  setDataAccToDate(arr)
- setSelectedArrNew([])
+ setSelectedArrNew(arr[0])
  setDateSelected(dateSelected || dateArr[0])
  },[dateArr,weatherData,setDataAccToDate,dateSelected])
  useEffect(()=>{
   setSelectedArr(dataAccToDate[`${dateSelected}`])
  },[weatherData,temp,dateSelected,setSelectedArr,dataAccToDate])
+
+ useEffect(()=>{
+  setDateSelected(currentCards[0])  
+ },[ currentPage ])
  return <StyledContainer maxWidth={false} jc="flex-start">
   <Row jc="space-between" height="50px" mWidth="80%" width="40%">
   <RadioGroup name="temp_selector" value={temp} onChange={e => setTemp(e.target.value)} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', width: "100%" }}>
