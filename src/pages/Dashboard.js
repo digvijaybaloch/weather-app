@@ -16,13 +16,19 @@ export default function Dashboard({ weatherData, fetchWeatherData, error }) {
  const [dateSelected, setDateSelected] = useState(0);
  const [dataAccToDate, setDataAccToDate] = useState({});
  const [currentPage, setCurrentPage] = useState(1);
- const cardsPerPage = useState(3)[0];
+ const [cardsPerPage,setCardsPerPage] = useState(3);
  const indexOfLastCard = currentPage * cardsPerPage;
  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
  const currentCards = dateArr && dateArr.slice(indexOfFirstCard, indexOfLastCard);
  const currentdateTextArr = dateTextArr && dateTextArr.slice(indexOfFirstCard, indexOfLastCard);
  const paginate = number => {
    setCurrentPage(number)
+ }
+ window.onresize = () => {
+  checkwindowResize()
+ }
+ const checkwindowResize=()=>{
+  window.innerWidth < 600 ? setCardsPerPage(1) : setCardsPerPage(3)
  }
  useEffect(()=>{
   // if(!weatherData){
