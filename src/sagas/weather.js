@@ -21,7 +21,7 @@ export function* fetchWeatherDataAsync(action) {
   yield put({
    type: FETCH_WEATHER_DATA_FAILED,
    payload: {
-    error
+    error: error.message
    }
   })
  }

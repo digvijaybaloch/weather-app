@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Radio,RadioGroup, FormControlLabel, CardContent, Typography, Button } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import Pagination from '../components/Pagination'
 import GraphContainer from '../components/GraphContainer'
 import { Row, StyledContainer, CardContainer } from '../styled-components/div'
 import { StyledCard, StyledCardAction } from '../styled-components/card'
 
-export default function Dashboard({ weatherData, fetchWeatherData }) {
+export default function Dashboard({ weatherData, fetchWeatherData, error }) {
  const [temp, setTemp] = useState('F');
  const [tempSymbol, setTempSymbol] = useState('°F');
  const [dateArr, setDateArr] = useState([]);
@@ -51,22 +52,22 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
   setSelectedArrNew(newArr)
  },[selectedArr])
  useEffect(()=>{
-  let arr = weatherData.list.map(item => {
+  let arr = weatherData && weatherData.length !== 0 && weatherData.list.map(item => {
    let ldt = new Date(item.dt * 1000).getUTCDate()
    return ldt
   })
-  setDateArr(arr.filter((val,idx,self)=> self.indexOf(val) === idx))
-  let locArr = weatherData.list.map(item => {
+  setDateArr(arr && arr.length !== 0 && arr.filter((val,idx,self)=> self.indexOf(val) === idx))
+  let locArr = weatherData && weatherData.length !== 0 && weatherData.list.map(item => {
     let dt = new Date(item.dt  * 1000).toLocaleDateString('en-US',{
       weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
     })
     return dt;
   })
-  setDateTextArr(locArr.filter((val,idx,self)=> self.indexOf(val) === idx))
+  setDateTextArr(locArr && locArr !== 0 && locArr.filter((val,idx,self)=> self.indexOf(val) === idx))
  },[weatherData,setDateArr])
  useEffect(()=>{
   let arr={};
-  dateArr && weatherData && dateArr.map(dt => arr[`${dt}`] = weatherData.list.filter(wd => {
+  dateArr && weatherData && weatherData.length !== 0 && weatherData && dateArr.map(dt => arr[`${dt}`] = weatherData && weatherData.length !== 0 && weatherData.list.filter(wd => {
    let ld = new Date(wd.dt*1000).getUTCDate()
    return ld === dt
   }))
@@ -83,13 +84,13 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
  },[ currentPage ])
  return <StyledContainer maxWidth={false} jc="flex-start">
   <Row jc="space-between" height="50px" mWidth="80%" width="40%">
-  <RadioGroup name="temp_selector" value={temp} onChange={e => setTemp(e.target.value)} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', width: "100%" }}>
+  {!error && <RadioGroup name="temp_selector" value={temp} onChange={e => setTemp(e.target.value)} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', width: "100%" }}>
    <FormControlLabel value="F" control={<Radio color="primary" />} label="Fahrenheit"/>
    <FormControlLabel value="C" control={<Radio color="primary" />} label="Celsius"/>
-  </RadioGroup>
+  </RadioGroup>}
   <Button variant="contained" color="primary" onClick={fetchWData}>Refresh</Button>
   </Row>
-  <Pagination currentPage={currentPage} cardsPerPage={cardsPerPage} totalCards={dateArr.length} paginate={paginate} />
+  {!error && <React.Fragment><Pagination currentPage={currentPage} cardsPerPage={cardsPerPage} totalCards={dateArr.length} paginate={paginate} />
   <CardContainer padding="10px" mt="10px" mb="50px" >
    {currentCards && currentCards.map((d,idx) =>{
     let temp = 0;
@@ -112,7 +113,8 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
      </StyledCardAction>
     </StyledCard>
    })}   
-  </CardContainer>
- {selectedArrNew && selectedArrNew.length > 1 && <GraphContainer selectedArrNew={selectedArrNew} tempSymbol={tempSymbol} />}
+  </CardContainer></React.Fragment>}
+ {selectedArrNew && !error && selectedArrNew.length > 1 && <GraphContainer selectedArrNew={selectedArrNew} tempSymbol={tempSymbol} />}
+ {error && <Alert severity="error">{error}</Alert>}
  </StyledContainer>
 }

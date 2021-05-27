@@ -4,7 +4,8 @@ import Dashboard from '../pages/Dashboard';
 import { fetchWeatherData } from '../actions/weather';
 
 const mapStateToProps = (state) => ({
- weatherData: state.weather.data
+ weatherData: state.weather.data,
+ error: state.weather.error
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
