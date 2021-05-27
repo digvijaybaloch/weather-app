@@ -6,7 +6,7 @@ import GraphContainer from '../components/GraphContainer'
 import { Row, StyledContainer, CardContainer } from '../styled-components/div'
 import { StyledCard, StyledCardAction } from '../styled-components/card'
 
-export default function Dashboard({ weatherData, fetchWeatherData, error }) {
+export default function Dashboard({ weatherData, fetchWeatherData, error, convertTemperature }) {
  const [temp, setTemp] = useState('F');
  const [tempSymbol, setTempSymbol] = useState('°F');
  const [dateArr, setDateArr] = useState([]);
@@ -31,10 +31,13 @@ export default function Dashboard({ weatherData, fetchWeatherData, error }) {
   window.innerWidth < 600 ? setCardsPerPage(1) : setCardsPerPage(3)
  }
  useEffect(()=>{
-  // if(!weatherData){
+  if(!weatherData){
    fetchWData()
-  // }
- },[temp,fetchWeatherData])
+  }
+ },[fetchWeatherData])
+ useEffect(()=>{
+  weatherData && convertTemperature({selectedTemp: temp})
+ },[temp])
  const fetchWData = () =>{
   if(temp === 'F') {setTempSymbol('°F'); return fetchWeatherData({ units: 'Imperial' })}
   if(temp === 'C') {setTempSymbol('°C'); return fetchWeatherData({ units: 'metric' })}  
