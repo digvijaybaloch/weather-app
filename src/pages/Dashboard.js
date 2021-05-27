@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Radio,RadioGroup, FormControlLabel, CardContent, Typography } from '@material-ui/core';
+import { Radio,RadioGroup, FormControlLabel, CardContent, Typography, Button } from '@material-ui/core';
 import Pagination from '../components/Pagination'
 import GraphContainer from '../components/GraphContainer'
 import { Row, StyledContainer, CardContainer } from '../styled-components/div'
@@ -24,11 +24,14 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
    setCurrentPage(number)
  }
  useEffect(()=>{
-  if(!weatherData){
-   if(temp === 'F') {setTempSymbol('°F'); return fetchWeatherData({ units: 'Imperial' })}
-   if(temp === 'C') {setTempSymbol('°C'); return fetchWeatherData({ units: 'metric' })}
-  }
+  // if(!weatherData){
+   fetchWData()
+  // }
  },[temp,fetchWeatherData])
+ const fetchWData = () =>{
+  if(temp === 'F') {setTempSymbol('°F'); return fetchWeatherData({ units: 'Imperial' })}
+  if(temp === 'C') {setTempSymbol('°C'); return fetchWeatherData({ units: 'metric' })}  
+ }
  useEffect(()=>{
   let newArr = [];
   selectedArr && selectedArr.length > 0 && selectedArr.map(arr => {
@@ -84,6 +87,7 @@ export default function Dashboard({ weatherData, fetchWeatherData }) {
    <FormControlLabel value="F" control={<Radio color="primary" />} label="Fahrenheit"/>
    <FormControlLabel value="C" control={<Radio color="primary" />} label="Celsius"/>
   </RadioGroup>
+  <Button variant="contained" color="primary" onClick={fetchWData}>Refresh</Button>
   </Row>
   <Pagination currentPage={currentPage} cardsPerPage={cardsPerPage} totalCards={dateArr.length} paginate={paginate} />
   <CardContainer padding="10px" mt="10px" mb="50px" >
